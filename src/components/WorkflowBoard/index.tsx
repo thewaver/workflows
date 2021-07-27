@@ -8,6 +8,8 @@ import {
   removeTriggerById,
 } from "../../rdx/workflow/slice";
 import { Action, Id, Trigger } from "../../types";
+import { Modal } from "../Modal";
+import { NewTriggerForm } from "../NewTriggerForm";
 import { VerticalList } from "../VerticalList";
 import "./style.css";
 
@@ -73,9 +75,23 @@ export const WorkflowBoard = () => {
   const actionMap = useSelector(selectActionMap);
   const triggerMap = useSelector(selectTriggerMap);
 
+  const [isAddingEntity, setIsAddingEntity] = useState(false);
+
+  const handleModalClose = useCallback(() => {
+    setIsAddingEntity(false);
+  }, []);
+
   const handleActionAdd = useCallback(() => {
-    dispatch(addAction({ id: "doSomethingNew", name: "do something new" }));
-  }, [dispatch]);
+    setIsAddingEntity(true);
+  }, []);
+
+  const handleActionSave = useCallback(
+    (action: Action) => {
+      setIsAddingEntity(false);
+      dispatch(addAction(action));
+    },
+    [dispatch],
+  );
 
   const handleActionDelete = useCallback(
     (id: Id) => {
@@ -85,8 +101,16 @@ export const WorkflowBoard = () => {
   );
 
   const handleTriggerAdd = useCallback(() => {
-    dispatch(addTrigger({ id: "onSomethingOld", name: "on something old" }));
-  }, [dispatch]);
+    setIsAddingEntity(true);
+  }, []);
+
+  const handleTriggerSave = useCallback(
+    (trigger: Trigger) => {
+      setIsAddingEntity(false);
+      dispatch(addTrigger(trigger));
+    },
+    [dispatch],
+  );
 
   const handleTriggerDelete = useCallback(
     (id: Id) => {
@@ -96,13 +120,20 @@ export const WorkflowBoard = () => {
   );
 
   return (
-    <WorkflowBoardCmp
-      actionMap={actionMap}
-      triggerMap={triggerMap}
-      onActionAdd={handleActionAdd}
-      onActionDelete={handleActionDelete}
-      onTriggerAdd={handleTriggerAdd}
-      onTriggerDelete={handleTriggerDelete}
-    />
+    <>
+      <WorkflowBoardCmp
+        actionMap={actionMap}
+        triggerMap={triggerMap}
+        onActionAdd={handleActionAdd}
+        onActionDelete={handleActionDelete}
+        onTriggerAdd={handleTriggerAdd}
+        onTriggerDelete={handleTriggerDelete}
+      />
+      {isAddingEntity ? (
+        <Modal onClose={handleModalClose}>
+          <NewTriggerForm onCancel={handleModalClose} onSave={handleTriggerSave} />
+        </Modal>
+      ) : null}
+    </>
   );
 };

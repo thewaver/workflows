@@ -1,0 +1,22 @@
+.Form .Title {
+  margin: calc(var(--grid-size) * 2);
+  text-transform: uppercase;
+  font-size: var(--txt-size-small);
+}
+
+.Form .Content {
+  padding: calc(var(--grid-size) * 2);
+  border-top: 1px solid var(--clr-line);
+}
+
+.Form .Buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: stretch;
+  margin: calc(var(--grid-size) * 2);
+}
+
+.Form .Buttons button + button {
+  margin-left: calc(var(--grid-size) * 1);
+}

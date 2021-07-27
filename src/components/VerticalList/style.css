@@ -11,7 +11,7 @@
 }
 
 .VerticalList .Title {
-  padding-bottom: calc(var(--grid-size) * 2);
+  margin-bottom: calc(var(--grid-size) * 2);
   text-transform: uppercase;
   font-size: var(--txt-size-small);
 }

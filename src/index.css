@@ -4,8 +4,10 @@
 
   --clr-button: rgb(255, 255, 255);
   --clr-button-inverted: rgb(8, 24, 32);
-
+  --clr-input: rgb(255, 255, 255);
+  --clr-line: rgba(0, 0, 0, 0.1);
   --clr-panel: rgba(255, 255, 255, 0.5);
+  --clr-overlay: rgba(255, 255, 255, 0.9);
 
   --clr-text: black;
   --clr-text-inverted: white;
@@ -23,20 +25,16 @@
   --txt-size-extra: 28px;
 
   --shd-softer: 0 1px 2px 0 rgb(0, 0, 0, 0.25);
-  --shd-soft: 0 2px 4px 1px rgb(0, 0, 0, 0.33);
-  --shd-medium: 0 4px 8px 2px rgb(0, 0, 0, 0.5);
-  --shd-strong: 0 8px 16px 4px rgb(0, 0, 0, 0.66);
-  --shd-stronger: 0 16px 32px 8px rgb(0, 0, 0, 0.75);
+  --shd-soft: 0 2px 4px 1px rgb(0, 0, 0, 0.3);
+  --shd-medium: 0 4px 8px 2px rgb(0, 0, 0, 0.35);
+  --shd-strong: 0 8px 16px 4px rgb(0, 0, 0, 0.35);
+  --shd-stronger: 0 16px 32px 8px rgb(0, 0, 0, 0.35);
 
   --hover-brightness: 1.5;
 
   --anim-duration: 0.33s;
 
   --scroll-width: 8px; /* FF "thin" */
-}
-
-* {
-  box-sizing: border-box;
 }
 
 * {
@@ -123,8 +121,8 @@ button {
   transition: background-color var(--anim-duration), color var(--anim-duration);
 }
 
-button:active,
-button:hover {
+button:active:not(:disabled),
+button:hover:not(:disabled) {
   background-color: var(--clr-secondary);
 }
 
@@ -142,7 +140,15 @@ button.Inverted {
   color: var(--clr-text-inverted);
 }
 
-button.Inverted:active,
-button.Inverted:hover {
+button.Inverted:active:not(:disabled),
+button.Inverted:hover:not(:disabled) {
   color: var(--clr-secondary);
+}
+
+input {
+  appearance: none;
+  background-color: var(--clr-input);
+  border: 1px solid var(--clr-line);
+  /* border-radius: calc(var(--grid-size) * 0.5); */
+  padding: calc(var(--grid-size) * 0.5);
 }
