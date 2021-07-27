@@ -1,0 +1,19 @@
+.WorkflowBoard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: calc(var(--grid-size) * 2);
+}
+
+.WorkflowBoard .Board {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: calc(var(--grid-size) * 4);
+}
+
+.WorkflowBoard .Info {
+  text-align: center;
+}

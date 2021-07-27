@@ -1,0 +1,148 @@
+:root {
+  --clr-bkg-low: rgb(255, 240, 224);
+  --clr-bkg-high: rgb(255, 224, 240);
+
+  --clr-button: rgb(255, 255, 255);
+  --clr-button-inverted: rgb(8, 24, 32);
+
+  --clr-panel: rgba(255, 255, 255, 0.5);
+
+  --clr-text: black;
+  --clr-text-inverted: white;
+
+  --clr-primary: rgb(255, 128, 192);
+  --clr-secondary: rgb(255, 192, 96);
+  --clr-tertiary: rgb(128, 192, 96);
+
+  --grid-size: 8px;
+
+  --txt-size-check: 10px;
+  --txt-size-small: 12px;
+  --txt-size-medium: 14px;
+  --txt-size-large: 16px;
+  --txt-size-extra: 28px;
+
+  --shd-softer: 0 1px 2px 0 rgb(0, 0, 0, 0.25);
+  --shd-soft: 0 2px 4px 1px rgb(0, 0, 0, 0.33);
+  --shd-medium: 0 4px 8px 2px rgb(0, 0, 0, 0.5);
+  --shd-strong: 0 8px 16px 4px rgb(0, 0, 0, 0.66);
+  --shd-stronger: 0 16px 32px 8px rgb(0, 0, 0, 0.75);
+
+  --hover-brightness: 1.5;
+
+  --anim-duration: 0.33s;
+
+  --scroll-width: 8px; /* FF "thin" */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-color: var(--clr-primary) var(--clr-bkg-high);
+  scrollbar-width: thin;
+}
+
+.disabled,
+:disabled {
+  opacity: 0.5;
+  filter: saturate(0.5);
+  cursor: not-allowed;
+}
+
+:focus {
+  outline: 2px solid var(--clr-primary);
+}
+
+::-webkit-scrollbar {
+  width: var(--scroll-width);
+  height: var(--scroll-width);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: var(--clr-bkg-high);
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--clr-bkg-high);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--clr-primary);
+  box-shadow: inset 0 0 0 1px var(--clr-bkg-high);
+  transition: background-color var(--anim-duration);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  filter: brightness(1.5);
+}
+
+a,
+a:visited {
+  color: var(--clr-primary);
+  text-decoration: none;
+  outline-offset: 3px;
+  transition: filter var(--anim-duration);
+}
+
+a:hover,
+a:active {
+  filter: brightness(1.5);
+}
+
+#root,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  background-image: linear-gradient(135deg, var(--clr-bkg-low), var(--clr-bkg-high));
+  color: var(--clr-text);
+  font-family: "Open Sans", sans-serif;
+  font-size: var(--txt-size-medium);
+  font-weight: 600;
+}
+
+button {
+  appearance: none;
+  border-width: 2px;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: calc(var(--grid-size) * 0.5);
+  box-shadow: var(--shd-softer);
+  background-color: var(--clr-button);
+  color: var(--clr-text);
+  padding: calc(var(--grid-size) * 1) calc(var(--grid-size) * 2);
+  font-weight: 700;
+  transition: background-color var(--anim-duration), color var(--anim-duration);
+}
+
+button:active,
+button:hover {
+  background-color: var(--clr-secondary);
+}
+
+button.Iconic {
+  padding: 0;
+  width: calc(var(--grid-size) * 3);
+  height: calc(var(--grid-size) * 3);
+  border-radius: calc(var(--grid-size) * 3);
+  border-color: currentColor;
+  font-size: var(--txt-size-check);
+}
+
+button.Inverted {
+  background-color: var(--clr-button-inverted);
+  color: var(--clr-text-inverted);
+}
+
+button.Inverted:active,
+button.Inverted:hover {
+  color: var(--clr-secondary);
+}

@@ -1,0 +1,48 @@
+.VerticalList {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  text-align: center;
+  padding: calc(var(--grid-size) * 2);
+  border-radius: calc(var(--grid-size) * 0.5);
+  background-color: var(--clr-panel);
+  box-shadow: var(--shd-softer);
+}
+
+.VerticalList .Title {
+  padding-bottom: calc(var(--grid-size) * 2);
+  text-transform: uppercase;
+  font-size: var(--txt-size-small);
+}
+
+.VerticalList .Item {
+  position: relative;
+}
+
+.VerticalList .Item + .Item {
+  margin-top: calc(var(--grid-size) * 0.5);
+}
+
+.VerticalList .Item.Selected {
+  border: 2px solid var(--clr-secondary);
+}
+
+.VerticalList .Item .Icon {
+  margin-right: calc(var(--grid-size) * 1);
+}
+
+.VerticalList .Item .Delete {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-shadow: var(--shd-soft);
+  transform: translate(50%, -50%);
+}
+
+.VerticalList .Item.Item.Selected .Delete,
+.VerticalList .Item:active .Delete,
+.VerticalList .Item:hover .Delete {
+  display: initial;
+}
