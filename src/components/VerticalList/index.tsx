@@ -18,12 +18,15 @@ export const VerticalList: React.FC<VerticalListProps> = memo(
         {title ? <div className="Title">{title}</div> : null}
         {itemIds.map((itemId) => {
           const isSelected = itemId === selectedItemId;
+          const selectionCallback = () => onSelect(itemId);
 
           return (
             <button
               key={itemId}
               className={`Item ${isSelected ? "Selected" : ""}`}
-              onClick={() => onSelect(itemId)}
+              onClick={selectionCallback}
+              onMouseDown={selectionCallback}
+              onMouseUp={selectionCallback}
             >
               {renderItem(itemId)}
               <button className="Inverted Iconic Delete" onClick={() => onDelete(itemId)}>

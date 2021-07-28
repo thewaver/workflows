@@ -142,6 +142,7 @@ button.Inverted {
 
 button.Inverted:active:not(:disabled),
 button.Inverted:hover:not(:disabled) {
+  background-color: var(--clr-button-inverted);
   color: var(--clr-secondary);
 }
 

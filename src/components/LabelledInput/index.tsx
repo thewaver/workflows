@@ -1,4 +1,4 @@
-import React, { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import React, { DetailedHTMLProps, InputHTMLAttributes, memo } from "react";
 import "./style.css";
 
 export interface LabelledInputProps
@@ -6,11 +6,11 @@ export interface LabelledInputProps
   label: string;
 }
 
-export const LabelledInput: React.FC<LabelledInputProps> = ({ label, ...props }) => {
+export const LabelledInput: React.FC<LabelledInputProps> = memo(({ label, ...props }) => {
   return (
     <div className="LabelledInput">
       <div className="Label">{label}</div>
       <input {...props}></input>
     </div>
   );
-};
+});

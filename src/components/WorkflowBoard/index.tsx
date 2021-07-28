@@ -10,7 +10,10 @@ import {
 import { Action, Id, Trigger } from "../../types";
 import { Modal } from "../Modal";
 import { NewTriggerForm } from "../NewTriggerForm";
+import { NewActionForm } from "../NewActionForm";
 import { VerticalList } from "../VerticalList";
+import { ConnectionDisplay } from "../ConnectionDisplay";
+import { WorkflowState } from "./types";
 import "./style.css";
 
 interface WorkflowBoardProps {
@@ -54,6 +57,7 @@ const WorkflowBoardCmp: React.FC<WorkflowBoardProps> = memo(
             onDelete={onTriggerDelete}
             renderItem={renderTrigger}
           />
+          <ConnectionDisplay />
           <VerticalList
             title="action"
             itemIds={actionKeys}
@@ -75,19 +79,22 @@ export const WorkflowBoard = () => {
   const actionMap = useSelector(selectActionMap);
   const triggerMap = useSelector(selectTriggerMap);
 
-  const [isAddingEntity, setIsAddingEntity] = useState(false);
+  const [workflowState, setWorkflowState] = useState(WorkflowState.unset);
+
+  const isAddingEntity =
+    workflowState === WorkflowState.addingAction || workflowState === WorkflowState.addingTrigger;
 
   const handleModalClose = useCallback(() => {
-    setIsAddingEntity(false);
+    setWorkflowState(WorkflowState.unset);
   }, []);
 
   const handleActionAdd = useCallback(() => {
-    setIsAddingEntity(true);
+    setWorkflowState(WorkflowState.addingAction);
   }, []);
 
   const handleActionSave = useCallback(
     (action: Action) => {
-      setIsAddingEntity(false);
+      setWorkflowState(WorkflowState.unset);
       dispatch(addAction(action));
     },
     [dispatch],
@@ -101,12 +108,12 @@ export const WorkflowBoard = () => {
   );
 
   const handleTriggerAdd = useCallback(() => {
-    setIsAddingEntity(true);
+    setWorkflowState(WorkflowState.addingTrigger);
   }, []);
 
   const handleTriggerSave = useCallback(
     (trigger: Trigger) => {
-      setIsAddingEntity(false);
+      setWorkflowState(WorkflowState.unset);
       dispatch(addTrigger(trigger));
     },
     [dispatch],
@@ -131,7 +138,12 @@ export const WorkflowBoard = () => {
       />
       {isAddingEntity ? (
         <Modal onClose={handleModalClose}>
-          <NewTriggerForm onCancel={handleModalClose} onSave={handleTriggerSave} />
+          {workflowState === WorkflowState.addingAction ? (
+            <NewActionForm onCancel={handleModalClose} onSave={handleActionSave} />
+          ) : null}
+          {workflowState === WorkflowState.addingTrigger ? (
+            <NewTriggerForm onCancel={handleModalClose} onSave={handleTriggerSave} />
+          ) : null}
         </Modal>
       ) : null}
     </>

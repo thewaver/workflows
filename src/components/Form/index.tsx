@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import "./style.css";
 
 export interface FormProps {
@@ -8,7 +8,7 @@ export interface FormProps {
   onCancel: () => void;
 }
 
-export const Form: React.FC<FormProps> = ({ title, canSave, onSave, onCancel, children }) => {
+export const Form: React.FC<FormProps> = memo(({ title, canSave, onSave, onCancel, children }) => {
   return (
     <div className="Form">
       {title ? <div className="Title">{title}</div> : null}
@@ -23,4 +23,4 @@ export const Form: React.FC<FormProps> = ({ title, canSave, onSave, onCancel, ch
       </div>
     </div>
   );
-};
+});
