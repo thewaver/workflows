@@ -25,7 +25,7 @@ export const NewTriggerForm: React.FC<NewTriggerFormProps> = memo(({ onSave, onC
 
   return (
     <Form title="new trigger" onSave={handleSave} onCancel={onCancel} canSave={canSave}>
-      <LabelledInput label="name" onChange={handleNameChange} onSubmit={handleSave} />
+      <LabelledInput label="name" onPressEnter={handleSave} onChange={handleNameChange} />
     </Form>
   );
 });

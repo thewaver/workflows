@@ -94,6 +94,8 @@ export const WorkflowBoard = () => {
 
   const handleActionSave = useCallback(
     (action: Action) => {
+      console.log("WorkflowBoard.handleActionSave", action);
+
       setWorkflowState(WorkflowState.unset);
       dispatch(addAction(action));
     },
@@ -127,7 +129,7 @@ export const WorkflowBoard = () => {
   );
 
   return (
-    <>
+    <div aria-hidden={!isAddingEntity}>
       <WorkflowBoardCmp
         actionMap={actionMap}
         triggerMap={triggerMap}
@@ -146,6 +148,6 @@ export const WorkflowBoard = () => {
           ) : null}
         </Modal>
       ) : null}
-    </>
+    </div>
   );
 };

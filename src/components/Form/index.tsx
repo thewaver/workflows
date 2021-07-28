@@ -14,10 +14,10 @@ export const Form: React.FC<FormProps> = memo(({ title, canSave, onSave, onCance
       {title ? <div className="Title">{title}</div> : null}
       {children ? <div className="Content">{children}</div> : null}
       <div className="Buttons">
-        <button className="Cancel" onClick={onCancel}>
+        <button className="Cancel" type="button" onClick={onCancel}>
           {"Cancel"}
         </button>
-        <button className="Save" onClick={onSave} disabled={!canSave}>
+        <button className="Save" type="button" onClick={onSave} disabled={!canSave}>
           {"Save"}
         </button>
       </div>

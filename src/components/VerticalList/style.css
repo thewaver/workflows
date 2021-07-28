@@ -24,7 +24,8 @@
   margin-top: calc(var(--grid-size) * 0.5);
 }
 
-.VerticalList .Item.Selected {
+.VerticalList .Item.Selected button:not(.Iconic) {
+  background-color: var(--clr-bkg-low);
   border: 2px solid var(--clr-secondary);
 }
 
@@ -41,7 +42,7 @@
   transform: translate(50%, -50%);
 }
 
-.VerticalList .Item.Item.Selected .Delete,
+.VerticalList .Item.Selected .Delete,
 .VerticalList .Item:active .Delete,
 .VerticalList .Item:hover .Delete {
   display: initial;

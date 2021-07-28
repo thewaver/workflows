@@ -25,7 +25,7 @@ export const NewActionForm: React.FC<NewActionFormProps> = memo(({ onSave, onCan
 
   return (
     <Form title="new action" onSave={handleSave} onCancel={onCancel} canSave={canSave}>
-      <LabelledInput label="name" onChange={handleNameChange} onSubmit={handleSave} />
+      <LabelledInput label="name" onPressEnter={handleSave} onChange={handleNameChange} />
     </Form>
   );
 });

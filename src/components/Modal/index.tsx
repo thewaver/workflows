@@ -1,5 +1,6 @@
 import React, { memo, MouseEvent, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import "./style.css";
+import { getFocusableChildren } from "./utils";
 
 export interface ModalProps {
   onClose: () => void;
@@ -11,7 +12,7 @@ export const Modal: React.FC<ModalProps> = memo(({ onClose, children }) => {
 
   const handleClose = useCallback(
     (e: MouseEvent<HTMLDivElement>) => {
-      if (!containerRef?.current || !containerRef.current.contains(e.target as any)) {
+      if (!containerRef?.current || !containerRef.current.contains(e.target as HTMLElement)) {
         e.preventDefault();
         onClose();
       }
@@ -19,10 +20,27 @@ export const Modal: React.FC<ModalProps> = memo(({ onClose, children }) => {
     [onClose, containerRef],
   );
 
-  const handleKeyUp = useCallback(
+  const handleKeyPress = useCallback(
     (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.altKey) {
+        return;
+      }
+
       if (e.keyCode === 27) {
+        e.preventDefault();
         onClose();
+      } else if (e.keyCode === 9 && containerRef?.current) {
+        const focusableElements = getFocusableChildren(containerRef?.current);
+        const firstFocusable = focusableElements[0];
+        const lastFocusable = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey && e.target === firstFocusable) {
+          e.preventDefault();
+          (lastFocusable as HTMLElement).focus();
+        } else if (!e.shiftKey && e.target === lastFocusable) {
+          e.preventDefault();
+          (firstFocusable as HTMLElement).focus();
+        }
       }
     },
     [onClose],
@@ -31,41 +49,23 @@ export const Modal: React.FC<ModalProps> = memo(({ onClose, children }) => {
   useEffect(() => {
     const activeElement = activeElementRef.current;
 
-    window.addEventListener("keyup", handleKeyUp, false);
+    window.addEventListener("keydown", handleKeyPress, false);
 
     return () => {
-      window.removeEventListener("keyup", handleKeyUp, false);
+      window.removeEventListener("keydown", handleKeyPress, false);
 
       if (activeElement) {
         (activeElement as HTMLElement).focus();
       }
     };
-  }, [handleKeyUp]);
+  }, [handleKeyPress]);
 
   useLayoutEffect(() => {
-    const getFirstFocusableChild = (children: HTMLCollection): Element | undefined => {
-      for (let element of Object.values(children)) {
-        if (["A", "BUTTON", "INPUT"].includes(element.nodeName)) {
-          return element;
-        }
+    if (containerRef?.current) {
+      const firstFocusableElement = getFocusableChildren(containerRef?.current)[0];
 
-        if (element.children) {
-          const result = getFirstFocusableChild(element.children);
-
-          if (result) {
-            return result;
-          }
-        }
-      }
-
-      return undefined;
-    };
-
-    if (containerRef?.current?.children) {
-      const firstChild = getFirstFocusableChild(containerRef.current.children);
-
-      if (firstChild) {
-        (firstChild as HTMLElement).focus();
+      if (firstFocusableElement) {
+        (firstFocusableElement as HTMLElement).focus();
       }
     }
   }, []);

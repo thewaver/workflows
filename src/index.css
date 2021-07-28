@@ -126,6 +126,10 @@ button:hover:not(:disabled) {
   background-color: var(--clr-secondary);
 }
 
+button.FullWidth {
+  width: 100%;
+}
+
 button.Iconic {
   padding: 0;
   width: calc(var(--grid-size) * 3);
@@ -146,7 +150,8 @@ button.Inverted:hover:not(:disabled) {
   color: var(--clr-secondary);
 }
 
-input {
+input,
+textarea {
   appearance: none;
   background-color: var(--clr-input);
   border: 1px solid var(--clr-line);

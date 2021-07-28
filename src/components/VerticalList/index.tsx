@@ -21,18 +21,19 @@ export const VerticalList: React.FC<VerticalListProps> = memo(
           const selectionCallback = () => onSelect(itemId);
 
           return (
-            <button
-              key={itemId}
-              className={`Item ${isSelected ? "Selected" : ""}`}
-              onClick={selectionCallback}
-              onMouseDown={selectionCallback}
-              onMouseUp={selectionCallback}
-            >
-              {renderItem(itemId)}
+            <div key={itemId} className={`Item ${isSelected ? "Selected" : ""}`}>
+              <button
+                className="FullWidth"
+                onClick={selectionCallback}
+                onMouseDown={selectionCallback}
+                onMouseUp={selectionCallback}
+              >
+                {renderItem(itemId)}
+              </button>
               <button className="Inverted Iconic Delete" onClick={() => onDelete(itemId)}>
                 <i className="fas fa-times" />
               </button>
-            </button>
+            </div>
           );
         })}
         <button className="Item Add" onClick={onAdd}>
