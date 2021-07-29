@@ -4,6 +4,8 @@
 
   --clr-button: rgb(255, 255, 255);
   --clr-button-inverted: rgb(8, 24, 32);
+  --clr-button-selected: rgb(255, 240, 224);
+
   --clr-input: rgb(255, 255, 255);
   --clr-line: rgba(0, 0, 0, 0.1);
   --clr-panel: rgba(255, 255, 255, 0.5);

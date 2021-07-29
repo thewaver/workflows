@@ -7,7 +7,7 @@ import {
   removeActionById,
   removeTriggerById,
 } from "../../rdx/workflow/slice";
-import { Action, Id, Trigger } from "../../types";
+import { Action, EntityKind, Id, Trigger } from "../../types";
 import { Modal } from "../Modal";
 import { NewTriggerForm } from "../NewTriggerForm";
 import { NewActionForm } from "../NewActionForm";
@@ -34,11 +34,11 @@ const WorkflowBoardCmp: React.FC<WorkflowBoardProps> = memo(
     const triggerKeys = useMemo(() => Object.keys(triggerMap), [triggerMap]);
 
     const handleActionSelect = useCallback((id: Id) => {
-      setSelectedActionId(id);
+      setSelectedActionId((oldId) => (oldId !== id ? id : undefined));
     }, []);
 
     const handleTriggerSelect = useCallback((id: Id) => {
-      setSelectedTriggerId(id);
+      setSelectedTriggerId((oldId) => (oldId !== id ? id : undefined));
     }, []);
 
     const renderAction = useCallback((id: Id) => <>{actionMap[id].name}</>, [actionMap]);
@@ -52,16 +52,23 @@ const WorkflowBoardCmp: React.FC<WorkflowBoardProps> = memo(
             title="trigger"
             itemIds={triggerKeys}
             selectedItemId={selectedTriggerId}
+            itemKeyPrefix={EntityKind.Trigger}
             onAdd={onTriggerAdd}
             onSelect={handleTriggerSelect}
             onDelete={onTriggerDelete}
             renderItem={renderTrigger}
           />
-          <ConnectionDisplay />
+          <ConnectionDisplay
+            highlighted
+            actionId={selectedActionId}
+            triggerId={selectedTriggerId}
+            onClick={() => {}}
+          />
           <VerticalList
             title="action"
             itemIds={actionKeys}
             selectedItemId={selectedActionId}
+            itemKeyPrefix={EntityKind.Action}
             onAdd={onActionAdd}
             onSelect={handleActionSelect}
             onDelete={onActionDelete}

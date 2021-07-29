@@ -5,6 +5,11 @@ export interface Entity {
   name: string;
 }
 
+export enum EntityKind {
+  Action = "Action",
+  Trigger = "Trigger",
+}
+
 export interface Action extends Entity {
   triggerId?: Id;
 }

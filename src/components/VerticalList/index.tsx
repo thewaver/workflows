@@ -5,6 +5,7 @@ export interface VerticalListProps {
   title?: string;
   itemIds: string[];
   selectedItemId?: string;
+  itemKeyPrefix?: string;
   onAdd: () => void;
   onSelect: (itemId: string) => void;
   onDelete: (itemId: string) => void;
@@ -12,7 +13,7 @@ export interface VerticalListProps {
 }
 
 export const VerticalList: React.FC<VerticalListProps> = memo(
-  ({ title, itemIds, selectedItemId, onAdd, onSelect, onDelete, renderItem }) => {
+  ({ title, itemIds, selectedItemId, itemKeyPrefix, onAdd, onSelect, onDelete, renderItem }) => {
     return (
       <div className="VerticalList">
         {title ? <div className="Title">{title}</div> : null}
@@ -21,7 +22,11 @@ export const VerticalList: React.FC<VerticalListProps> = memo(
           const selectionCallback = () => onSelect(itemId);
 
           return (
-            <div key={itemId} className={`Item ${isSelected ? "Selected" : ""}`}>
+            <div
+              key={itemId}
+              id={`${itemKeyPrefix}_${itemId}`}
+              className={`Item ${isSelected ? "Selected" : ""}`}
+            >
               <button
                 className="FullWidth"
                 onClick={selectionCallback}

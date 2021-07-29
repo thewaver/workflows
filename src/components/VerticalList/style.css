@@ -25,7 +25,7 @@
 }
 
 .VerticalList .Item.Selected button:not(.Iconic) {
-  background-color: var(--clr-bkg-low);
+  background-color: var(--clr-button-selected);
   border: 2px solid var(--clr-secondary);
 }
 

@@ -7,8 +7,10 @@
 }
 
 .WorkflowBoard .Board {
-  display: grid;
-  grid-template-columns: 2fr 1fr 2fr;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
   margin-bottom: calc(var(--grid-size) * 4);
 }
 
