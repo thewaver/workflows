@@ -1,15 +1,8 @@
 .ConnectionDisplay {
   position: relative;
+  flex-shrink: 1;
+  align-self: stretch;
+  min-width: 48px;
+  max-width: 96px;
   width: 96px;
-}
-
-.ConnectionDisplay .Canvas {
-  position: absolute;
-  left: calc(var(--grid-size) * -2);
-}
-
-.ConnectionDisplay button {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }

@@ -44,6 +44,22 @@ export const workflowSlice = createSlice({
       const existingAction = state.actionMap[action.payload.actionId];
       const existingTrigger = state.triggerMap[action.payload.triggerId];
 
+      if (existingAction?.triggerId) {
+        const oldTrigger = state.triggerMap[existingAction.triggerId];
+
+        if (oldTrigger) {
+          oldTrigger.actionId = undefined;
+        }
+      }
+
+      if (existingTrigger?.actionId) {
+        const oldAction = state.actionMap[existingTrigger.actionId];
+
+        if (oldAction) {
+          oldAction.triggerId = undefined;
+        }
+      }
+
       if (existingAction && existingTrigger) {
         existingAction.triggerId = action.payload.triggerId;
         existingTrigger.actionId = action.payload.actionId;

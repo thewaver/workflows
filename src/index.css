@@ -53,7 +53,7 @@
 }
 
 :focus {
-  outline: 2px solid var(--clr-primary);
+  outline: 2px solid var(--clr-tertiary);
 }
 
 ::-webkit-scrollbar {
@@ -139,6 +139,7 @@ button.Iconic {
   border-radius: calc(var(--grid-size) * 3);
   border-color: currentColor;
   font-size: var(--txt-size-check);
+  box-shadow: var(--shd-soft);
 }
 
 button.Inverted {
@@ -150,6 +151,10 @@ button.Inverted:active:not(:disabled),
 button.Inverted:hover:not(:disabled) {
   background-color: var(--clr-button-inverted);
   color: var(--clr-secondary);
+}
+
+button.Primary {
+  background-color: var(--clr-primary);
 }
 
 input,

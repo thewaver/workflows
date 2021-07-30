@@ -41,7 +41,7 @@ export const VerticalList: React.FC<VerticalListProps> = memo(
             </div>
           );
         })}
-        <button className="Item Add" onClick={onAdd}>
+        <button className="Item Primary Add" onClick={onAdd}>
           <i className="Icon fas fa-plus"></i>
           {"Add"}
         </button>
