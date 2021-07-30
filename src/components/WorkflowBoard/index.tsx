@@ -45,8 +45,43 @@ const WorkflowBoardCmp: React.FC<WorkflowBoardProps> = memo(
     const [selectedTriggerId, setSelectedTriggerId] = useState<Id>();
     const [version, setVersion] = useState(0);
 
-    const actionKeys = useMemo(() => Object.keys(actionMap), [actionMap]);
-    const triggerKeys = useMemo(() => Object.keys(triggerMap), [triggerMap]);
+    const triggerKeys = useMemo(() => {
+      const categorized = Object.keys(triggerMap).reduce(
+        (result, currentId) => {
+          if (triggerMap[currentId].actionId !== undefined) {
+            result.connected.push(currentId);
+          } else {
+            result.notConnected.push(currentId);
+          }
+
+          return result;
+        },
+        {
+          connected: [] as Id[],
+          notConnected: [] as Id[],
+        },
+      );
+
+      return [...categorized.connected, ...categorized.notConnected];
+    }, [triggerMap]);
+
+    const actionKeys = useMemo(() => {
+      const notConnected = Object.keys(actionMap).filter(
+        (id) => actionMap[id].triggerId === undefined,
+      );
+
+      const connected = triggerKeys.reduce((result, currentId) => {
+        const actionId = triggerMap[currentId].actionId;
+
+        if (actionId) {
+          result.push(actionId);
+        }
+
+        return result;
+      }, [] as Id[]);
+
+      return [...connected, ...notConnected];
+    }, [actionMap, triggerMap, triggerKeys]);
 
     const handleActionSelect = useCallback((id: Id) => {
       setSelectedActionId((oldId) => (oldId !== id ? id : undefined));

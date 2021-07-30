@@ -50,19 +50,14 @@ export const Connection: React.FC<ConnectionProps> = memo(
     const { top: canvasParentTop, width: canvasWidth } =
       canvasRef?.current?.parentElement?.getBoundingClientRect() ?? defaultBoundingRect;
 
-    const canvasTop = Math.min(actionRect.top, triggerRect.top);
-    const canvasBottom = Math.max(actionRect.bottom, triggerRect.bottom);
-    const canvasTopWithParentOffset = canvasTop - canvasParentTop;
+    const canvasTop = Math.min(actionRect.top, triggerRect.top) - canvasParentTop;
+    const canvasBottom = Math.max(actionRect.bottom, triggerRect.bottom) - canvasParentTop;
     const canvasHeight = canvasBottom - canvasTop;
 
-    const connectionTop =
-      triggerRect.top < actionRect.top
-        ? triggerRect.height / 2
-        : canvasHeight - triggerRect.height / 2;
-    const connectionBottom =
-      triggerRect.top < actionRect.top
-        ? canvasHeight - actionRect.height / 2
-        : actionRect.height / 2;
+    const connectionTriggerCenter =
+      triggerRect.top - (canvasTop + canvasParentTop) + triggerRect.height / 2;
+    const connectionActionCenter =
+      actionRect.top - (canvasTop + canvasParentTop) + actionRect.height / 2;
 
     useLayoutEffect(() => {
       if (!canvasRef?.current) return;
@@ -71,12 +66,12 @@ export const Connection: React.FC<ConnectionProps> = memo(
 
       if (context) {
         setCanvasStyle({
-          top: `${canvasTopWithParentOffset}px`,
+          top: `${canvasTop}px`,
           width: `${canvasWidth}px`,
         });
 
         setButtonStyle({
-          top: `${canvasTopWithParentOffset + canvasHeight / 2}px`,
+          top: `${canvasTop + canvasHeight / 2}px`,
         });
 
         context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -89,17 +84,17 @@ export const Connection: React.FC<ConnectionProps> = memo(
         context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue(
           highlighted ? "--clr-secondary" : "--clr-text",
         );
-        context.moveTo(0, connectionTop);
-        context.lineTo(canvasWidth, connectionBottom);
+        context.moveTo(0, connectionTriggerCenter);
+        context.lineTo(canvasWidth, connectionActionCenter);
         context.stroke();
       }
     }, [
       highlighted,
-      canvasTopWithParentOffset,
+      canvasTop,
       canvasWidth,
       canvasHeight,
-      connectionTop,
-      connectionBottom,
+      connectionTriggerCenter,
+      connectionActionCenter,
     ]);
 
     const handleClick = useCallback(
