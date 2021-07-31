@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import deepCopy from "deep-copy";
 import { Action, Connection, Id, Trigger } from "../../types";
 
 interface WorkFlowStateBase {
@@ -21,12 +22,6 @@ const initialState: WorkflowState = {
   future: [],
 };
 
-// state: WritableDraft<WorkflowState> - type is not exported
-const addToStateHistory = (state: any) => {
-  state.past = state.past.concat([state.current]);
-  state.future = [];
-};
-
 export const workflowSlice = createSlice({
   name: "workflow",
   initialState,
@@ -35,28 +30,32 @@ export const workflowSlice = createSlice({
   // which detects changes to a "draft state" and produces a brand new
   // immutable state based off those changes
   reducers: {
-    undo: (state, action: PayloadAction<void>) => {
+    undo: (state) => {
       if (state.past.length > 0) {
-        state.future = state.future.concat([state.current]);
-        state.current = state.past[state.past.length - 1];
-        state.past = state.past.slice(0, state.past.length - 1);
+        state.future.push(deepCopy(state.current));
+        state.current = deepCopy(state.past[state.past.length - 1]);
+        state.past.pop();
       }
     },
 
-    redo: (state, action: PayloadAction<void>) => {
+    redo: (state) => {
       if (state.future.length > 0) {
-        state.past = state.past.concat([state.current]);
-        state.current = state.future[state.future.length - 1];
-        state.future = state.future.slice(0, state.future.length - 1);
+        state.past.push(deepCopy(state.current));
+        state.current = deepCopy(state.future[state.future.length - 1]);
+        state.future.pop();
       }
     },
 
     addAction: (state, action: PayloadAction<Action>) => {
+      state.past.push(deepCopy(state.current));
+      state.future = [];
       state.current.actionMap[action.payload.id] = action.payload;
-      addToStateHistory(state);
     },
 
     removeActionById: (state, action: PayloadAction<Id>) => {
+      state.past.push(deepCopy(state.current));
+      state.future = [];
+
       delete state.current.actionMap[action.payload];
 
       for (let value of Object.values(state.current.triggerMap)) {
@@ -64,8 +63,6 @@ export const workflowSlice = createSlice({
           value.actionId = undefined;
         }
       }
-
-      addToStateHistory(state);
     },
 
     setActions: (state, action: PayloadAction<Action[]>) => {
@@ -76,6 +73,9 @@ export const workflowSlice = createSlice({
     },
 
     addConnection: (state, action: PayloadAction<Connection>) => {
+      state.past.push(deepCopy(state.current));
+      state.future = [];
+
       const existingAction = state.current.actionMap[action.payload.actionId];
       const existingTrigger = state.current.triggerMap[action.payload.triggerId];
 
@@ -99,11 +99,12 @@ export const workflowSlice = createSlice({
         existingAction.triggerId = action.payload.triggerId;
         existingTrigger.actionId = action.payload.actionId;
       }
-
-      addToStateHistory(state);
     },
 
     removeConnection: (state, action: PayloadAction<Connection>) => {
+      state.past.push(deepCopy(state.current));
+      state.future = [];
+
       const existingAction = state.current.actionMap[action.payload.actionId];
       const existingTrigger = state.current.triggerMap[action.payload.triggerId];
 
@@ -114,16 +115,18 @@ export const workflowSlice = createSlice({
       if (existingTrigger) {
         existingTrigger.actionId = undefined;
       }
-
-      addToStateHistory(state);
     },
 
     addTrigger: (state, action: PayloadAction<Trigger>) => {
+      state.past.push(deepCopy(state.current));
+      state.future = [];
       state.current.triggerMap[action.payload.id] = action.payload;
-      addToStateHistory(state);
     },
 
     removeTriggerById: (state, action: PayloadAction<Id>) => {
+      state.past.push(deepCopy(state.current));
+      state.future = [];
+
       delete state.current.triggerMap[action.payload];
 
       for (let value of Object.values(state.current.actionMap)) {
@@ -131,8 +134,6 @@ export const workflowSlice = createSlice({
           value.triggerId = undefined;
         }
       }
-
-      addToStateHistory(state);
     },
 
     setTriggers: (state, action: PayloadAction<Trigger[]>) => {
@@ -146,6 +147,8 @@ export const workflowSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  undo,
+  redo,
   addAction,
   removeActionById,
   setActions,

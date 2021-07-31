@@ -5,9 +5,11 @@ import {
   addAction,
   addConnection,
   addTrigger,
+  redo,
   removeActionById,
   removeConnection,
   removeTriggerById,
+  undo,
 } from "../../rdx/workflow/slice";
 import { Action, EntityKind, Id, Trigger } from "../../types";
 import { Modal } from "../Modal";
@@ -188,8 +190,6 @@ export const WorkflowBoard = () => {
 
   const handleActionSave = useCallback(
     (action: Action) => {
-      console.log("WorkflowBoard.handleActionSave", action);
-
       setWorkflowState(WorkflowState.unset);
       dispatch(addAction(action));
     },
@@ -235,6 +235,28 @@ export const WorkflowBoard = () => {
     },
     [dispatch],
   );
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.ctrlKey) {
+        if (e.key.toLowerCase() === "z") {
+          if (e.shiftKey) {
+            dispatch(redo());
+          } else {
+            dispatch(undo());
+          }
+        } else if (e.key.toLowerCase() === "y") {
+          dispatch(redo());
+        }
+      }
+    },
+    [dispatch],
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
 
   return (
     <div aria-hidden={!isAddingEntity}>
