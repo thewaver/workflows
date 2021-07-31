@@ -1,12 +1,4 @@
-import React, {
-  memo,
-  MouseEvent,
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { memo, MouseEvent, useCallback, useLayoutEffect, useRef, useState } from "react";
 import { EntityKind, Id } from "../../types";
 import "./style.css";
 
@@ -34,16 +26,8 @@ export const Connection: React.FC<ConnectionProps> = memo(
     const [canvasStyle, setCanvasStyle] = useState<object>({});
     const [buttonStyle, setButtonStyle] = useState<object>({});
 
-    const actionElement = useMemo(
-      () => document.getElementById(`${EntityKind.Action}_${actionId}`),
-      [actionId],
-    );
-
-    const triggerElement = useMemo(
-      () => document.getElementById(`${EntityKind.Trigger}_${triggerId}`),
-      [triggerId],
-    );
-
+    const actionElement = document.getElementById(`${EntityKind.Action}_${actionId}`);
+    const triggerElement = document.getElementById(`${EntityKind.Trigger}_${triggerId}`);
     const actionRect = actionElement?.getBoundingClientRect() ?? defaultBoundingRect;
     const triggerRect = triggerElement?.getBoundingClientRect() ?? defaultBoundingRect;
 
@@ -106,7 +90,12 @@ export const Connection: React.FC<ConnectionProps> = memo(
       [actionId, triggerId, onClick],
     );
 
-    if (actionId === undefined || triggerId === undefined) {
+    if (
+      actionId === undefined ||
+      triggerId === undefined ||
+      actionElement === null ||
+      triggerElement === null
+    ) {
       return null;
     }
 

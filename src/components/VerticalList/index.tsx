@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { KeyboardEvent, memo, useCallback } from "react";
 import "./style.css";
 
 export interface VerticalListProps {
@@ -14,6 +14,15 @@ export interface VerticalListProps {
 
 export const VerticalList: React.FC<VerticalListProps> = memo(
   ({ title, itemIds, selectedItemId, itemKeyPrefix, onAdd, onSelect, onDelete, renderItem }) => {
+    const handleKeyDown = useCallback(
+      (itemId: string, e: KeyboardEvent<HTMLButtonElement>) => {
+        if (e.keyCode === 45) {
+          onDelete(itemId);
+        }
+      },
+      [onDelete],
+    );
+
     return (
       <div className="VerticalList">
         {title ? <div className="Title">{title}</div> : null}
@@ -32,6 +41,7 @@ export const VerticalList: React.FC<VerticalListProps> = memo(
                 onClick={selectionCallback}
                 onMouseDown={selectionCallback}
                 onMouseUp={selectionCallback}
+                onKeyDown={(e) => handleKeyDown(itemId, e)}
               >
                 {renderItem(itemId)}
               </button>

@@ -1,3 +1,7 @@
+.Form {
+  min-width: calc(var(--grid-size) * 32);
+}
+
 .Form .Title {
   margin: calc(var(--grid-size) * 2);
   text-transform: uppercase;

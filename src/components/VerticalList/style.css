@@ -41,7 +41,6 @@
   transform: translate(50%, -50%);
 }
 
-.VerticalList .Item.Selected .Delete,
 .VerticalList .Item:active .Delete,
 .VerticalList .Item:hover .Delete {
   display: initial;
