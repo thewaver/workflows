@@ -11,7 +11,7 @@ const defaultBoundingRect = {
   height: 0,
 };
 
-export interface ConnectionProps {
+export interface ConnectionLineProps {
   actionId?: Id;
   triggerId?: Id;
   highlighted?: boolean;
@@ -19,7 +19,7 @@ export interface ConnectionProps {
   onClick: (actionId: Id, triggerId: Id) => void;
 }
 
-export const Connection: React.FC<ConnectionProps> = memo(
+export const ConnectionLine: React.FC<ConnectionLineProps> = memo(
   ({ actionId, triggerId, highlighted, onClick }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
