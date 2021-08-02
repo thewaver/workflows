@@ -10,7 +10,7 @@
 
 .Form .Content {
   padding: calc(var(--grid-size) * 2);
-  border-top: 1px solid var(--clr-line);
+  border-top: 1px solid var(--clr-line-soft);
 }
 
 .Form .Buttons {

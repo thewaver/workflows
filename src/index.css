@@ -1,22 +1,24 @@
 :root {
   --clr-bkg-low: rgb(255, 240, 224);
-  --clr-bkg-high: rgb(255, 224, 240);
+  --clr-bkg-high: rgb(224, 240, 255);
 
   --clr-button: rgb(255, 255, 255);
   --clr-button-inverted: rgb(8, 24, 32);
   --clr-button-selected: rgb(255, 240, 224);
 
   --clr-input: rgb(255, 255, 255);
-  --clr-line: rgba(0, 0, 0, 0.1);
   --clr-panel: rgba(255, 255, 255, 0.5);
   --clr-overlay: rgba(255, 255, 255, 0.9);
 
   --clr-text: black;
   --clr-text-inverted: white;
 
-  --clr-primary: rgb(255, 128, 192);
-  --clr-secondary: rgb(255, 192, 96);
-  --clr-tertiary: rgb(128, 192, 96);
+  --clr-line-soft: rgba(0, 0, 0, 0.1);
+  --clr-line-hard: rgba(0, 0, 0, 0.5);
+
+  --clr-primary: rgb(64, 192, 255);
+  --clr-secondary: rgb(255, 192, 64);
+  --clr-tertiary: rgb(255, 64, 192);
 
   --grid-size: 8px;
 
@@ -26,11 +28,11 @@
   --txt-size-large: 16px;
   --txt-size-extra: 28px;
 
-  --shd-softer: 0 1px 2px 0 rgb(0, 0, 0, 0.25);
-  --shd-soft: 0 2px 4px 1px rgb(0, 0, 0, 0.3);
-  --shd-medium: 0 4px 8px 2px rgb(0, 0, 0, 0.35);
-  --shd-strong: 0 8px 16px 4px rgb(0, 0, 0, 0.35);
-  --shd-stronger: 0 16px 32px 8px rgb(0, 0, 0, 0.35);
+  --shd-softer: 0 1px 2px 0 rgb(0, 0, 0, 0.3);
+  --shd-soft: 0 2px 4px 1px rgb(0, 0, 0, 0.35);
+  --shd-medium: 0 4px 8px 2px rgb(0, 0, 0, 0.4);
+  --shd-strong: 0 4px 16px 4px rgb(0, 0, 0, 0.45);
+  --shd-stronger: 0 8px 32px 8px rgb(0, 0, 0, 0.5);
 
   --hover-brightness: 1.5;
 
@@ -161,7 +163,7 @@ input,
 textarea {
   appearance: none;
   background-color: var(--clr-input);
-  border: 1px solid var(--clr-line);
+  border: 1px solid var(--clr-line-soft);
   /* border-radius: calc(var(--grid-size) * 0.5); */
   padding: calc(var(--grid-size) * 0.5);
 }

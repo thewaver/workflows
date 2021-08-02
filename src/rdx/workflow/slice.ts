@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import deepCopy from "deep-copy";
-import { Action, Connection, Id, Trigger } from "../../types";
+import { Action, APICallState, Connection, Id, Trigger } from "../../types";
 
 interface WorkFlowStateBase {
   actionMap: Record<Id, Action>;
@@ -11,6 +11,8 @@ interface WorkflowState {
   current: WorkFlowStateBase;
   past: WorkFlowStateBase[];
   future: WorkFlowStateBase[];
+  actionFetchSate: APICallState;
+  triggerFetchState: APICallState;
 }
 
 const initialState: WorkflowState = {
@@ -20,6 +22,8 @@ const initialState: WorkflowState = {
   },
   past: [],
   future: [],
+  actionFetchSate: APICallState.unset,
+  triggerFetchState: APICallState.unset,
 };
 
 export const workflowSlice = createSlice({
@@ -65,11 +69,20 @@ export const workflowSlice = createSlice({
       }
     },
 
-    setActions: (state, action: PayloadAction<Action[]>) => {
+    setActionsStart: (state) => {
+      state.actionFetchSate = APICallState.waiting;
+    },
+
+    setActionsFailure: (state) => {
+      state.actionFetchSate = APICallState.failure;
+    },
+
+    setActionsSuccess: (state, action: PayloadAction<Action[]>) => {
       state.current.actionMap = action.payload.reduce((mappedActions, currentAction) => {
         mappedActions[currentAction.id] = currentAction;
         return mappedActions;
       }, {} as Record<Id, Action>);
+      state.actionFetchSate = APICallState.success;
     },
 
     addConnection: (state, action: PayloadAction<Connection>) => {
@@ -136,11 +149,20 @@ export const workflowSlice = createSlice({
       }
     },
 
-    setTriggers: (state, action: PayloadAction<Trigger[]>) => {
+    setTriggersStart: (state) => {
+      state.triggerFetchState = APICallState.waiting;
+    },
+
+    setTriggersFailure: (state) => {
+      state.triggerFetchState = APICallState.failure;
+    },
+
+    setTriggersSuccess: (state, action: PayloadAction<Trigger[]>) => {
       state.current.triggerMap = action.payload.reduce((mappedTriggers, currentTrigger) => {
         mappedTriggers[currentTrigger.id] = currentTrigger;
         return mappedTriggers;
       }, {} as Record<Id, Action>);
+      state.triggerFetchState = APICallState.success;
     },
   },
 });
@@ -151,12 +173,16 @@ export const {
   redo,
   addAction,
   removeActionById,
-  setActions,
+  setActionsStart,
+  setActionsFailure,
+  setActionsSuccess,
   addConnection,
   removeConnection,
   addTrigger,
   removeTriggerById,
-  setTriggers,
+  setTriggersStart,
+  setTriggersFailure,
+  setTriggersSuccess,
 } = workflowSlice.actions;
 
 export default workflowSlice.reducer;

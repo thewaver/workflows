@@ -9,3 +9,7 @@ export const selectTriggerById = (state: RootState, id: Id) =>
   state.workflow.current.triggerMap[id];
 
 export const selectTriggerMap = (state: RootState) => state.workflow.current.triggerMap;
+
+export const selectActionFetchState = (state: RootState) => state.workflow.actionFetchSate;
+
+export const selectTriggerFetchState = (state: RootState) => state.workflow.triggerFetchState;

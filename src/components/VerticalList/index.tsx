@@ -16,7 +16,8 @@ export const VerticalList: React.FC<VerticalListProps> = memo(
   ({ title, itemIds, selectedItemId, itemKeyPrefix, onAdd, onSelect, onDelete, renderItem }) => {
     const handleKeyDown = useCallback(
       (itemId: string, e: KeyboardEvent<HTMLButtonElement>) => {
-        if (e.keyCode === 45) {
+        if (e.keyCode === 46) {
+          e.preventDefault();
           onDelete(itemId);
         }
       },

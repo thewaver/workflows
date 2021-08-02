@@ -1,16 +1,18 @@
 import React, { memo } from "react";
+import { EntityKind } from "../../types";
 import { Form } from "../Form";
 
 export interface ConfirmEntityRemovalFormProps {
+  entityKind: EntityKind;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
 export const ConfirmEntityRemovalForm: React.FC<ConfirmEntityRemovalFormProps> = memo(
-  ({ children, onConfirm, onCancel }) => {
+  ({ entityKind, children, onConfirm, onCancel }) => {
     return (
       <Form
-        title="remove entity?"
+        title={`remove ${entityKind}?`}
         saveLabel="Yes"
         cancelLabel="no"
         onSave={onConfirm}

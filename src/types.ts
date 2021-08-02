@@ -22,3 +22,10 @@ export interface Connection {
 export interface Trigger extends Entity {
   actionId?: Id;
 }
+
+export enum APICallState {
+  unset,
+  waiting,
+  success,
+  failure,
+}

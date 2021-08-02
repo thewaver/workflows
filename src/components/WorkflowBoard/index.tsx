@@ -1,6 +1,11 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectActionMap, selectTriggerMap } from "../../rdx/workflow/selectors";
+import {
+  selectActionFetchState,
+  selectActionMap,
+  selectTriggerFetchState,
+  selectTriggerMap,
+} from "../../rdx/workflow/selectors";
 import {
   addAction,
   addConnection,
@@ -11,7 +16,7 @@ import {
   removeTriggerById,
   undo,
 } from "../../rdx/workflow/slice";
-import { Action, Connection, EntityKind, Id, Trigger } from "../../types";
+import { Action, APICallState, Connection, EntityKind, Id, Trigger } from "../../types";
 import { Modal } from "../Modal";
 import { ConfirmEntityRemovalForm } from "../ConfirmEntityRemovalForm";
 import { NewTriggerForm } from "../NewTriggerForm";
@@ -83,47 +88,44 @@ const WorkflowBoardCmp: React.FC<WorkflowBoardProps> = memo(
 
     return (
       <div className="WorkflowBoard">
-        <div className="Board">
-          <VerticalList
-            title="trigger"
-            itemIds={triggerKeys}
-            selectedItemId={selectedTriggerId}
-            itemKeyPrefix={EntityKind.Trigger}
-            onAdd={onTriggerAdd}
-            onSelect={handleTriggerSelect}
-            onDelete={onTriggerRemove}
-            renderItem={renderTrigger}
-          />
-          <ConnectionDisplay onChangeWidth={handleChangeWidth}>
-            {connections.map((connection) => (
-              <ConnectionLine
-                key={`${connection.triggerId}_${connection.actionId}`}
-                version={version}
-                actionId={connection.actionId}
-                triggerId={connection.triggerId}
-                onClick={onConnectionRemove}
-              />
-            ))}
+        <VerticalList
+          title="trigger"
+          itemIds={triggerKeys}
+          selectedItemId={selectedTriggerId}
+          itemKeyPrefix={EntityKind.Trigger}
+          onAdd={onTriggerAdd}
+          onSelect={handleTriggerSelect}
+          onDelete={onTriggerRemove}
+          renderItem={renderTrigger}
+        />
+        <ConnectionDisplay onChangeWidth={handleChangeWidth}>
+          {connections.map((connection) => (
             <ConnectionLine
-              highlighted
+              key={`${connection.triggerId}_${connection.actionId}`}
               version={version}
-              actionId={selectedActionId}
-              triggerId={selectedTriggerId}
-              onClick={handleConnectionAdd}
+              actionId={connection.actionId}
+              triggerId={connection.triggerId}
+              onClick={onConnectionRemove}
             />
-          </ConnectionDisplay>
-          <VerticalList
-            title="action"
-            itemIds={actionKeys}
-            selectedItemId={selectedActionId}
-            itemKeyPrefix={EntityKind.Action}
-            onAdd={onActionAdd}
-            onSelect={handleActionSelect}
-            onDelete={onActionRemove}
-            renderItem={renderAction}
+          ))}
+          <ConnectionLine
+            highlighted
+            version={version}
+            actionId={selectedActionId}
+            triggerId={selectedTriggerId}
+            onClick={handleConnectionAdd}
           />
-        </div>
-        <div className="Info">{"Some description goes here."}</div>
+        </ConnectionDisplay>
+        <VerticalList
+          title="action"
+          itemIds={actionKeys}
+          selectedItemId={selectedActionId}
+          itemKeyPrefix={EntityKind.Action}
+          onAdd={onActionAdd}
+          onSelect={handleActionSelect}
+          onDelete={onActionRemove}
+          renderItem={renderAction}
+        />
       </div>
     );
   },
@@ -133,6 +135,8 @@ export const WorkflowBoard = () => {
   const dispatch = useDispatch();
   const actionMap = useSelector(selectActionMap);
   const triggerMap = useSelector(selectTriggerMap);
+  const actionFetchState = useSelector(selectActionFetchState);
+  const triggerFetchState = useSelector(selectTriggerFetchState);
 
   const [workflowState, setWorkflowState] = useState(WorkflowState.unset);
   const [idOfEntityBeingRemoved, setIdOfEntityBeingRemoved] = useState<string>();
@@ -252,12 +256,14 @@ export const WorkflowBoard = () => {
     (e: KeyboardEvent) => {
       if (e.ctrlKey) {
         if (e.key.toLowerCase() === "z") {
+          e.preventDefault();
           if (e.shiftKey) {
             dispatch(redo());
           } else {
             dispatch(undo());
           }
         } else if (e.key.toLowerCase() === "y") {
+          e.preventDefault();
           dispatch(redo());
         }
       }
@@ -269,6 +275,14 @@ export const WorkflowBoard = () => {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
+
+  if (actionFetchState === APICallState.waiting || triggerFetchState === APICallState.waiting) {
+    return <div className="Loading">{"loading..."}</div>;
+  }
+
+  if (actionFetchState !== APICallState.success || triggerFetchState !== APICallState.success) {
+    return <div className="NoData">{"no data"}</div>;
+  }
 
   return (
     <>
@@ -294,6 +308,7 @@ export const WorkflowBoard = () => {
           {workflowState === WorkflowState.removingAction &&
           idOfEntityBeingRemoved !== undefined ? (
             <ConfirmEntityRemovalForm
+              entityKind={EntityKind.Action}
               onCancel={handleModalClose}
               onConfirm={handleActionRemoveConfirm}
             >
@@ -303,6 +318,7 @@ export const WorkflowBoard = () => {
           {workflowState === WorkflowState.removingTrigger &&
           idOfEntityBeingRemoved !== undefined ? (
             <ConfirmEntityRemovalForm
+              entityKind={EntityKind.Trigger}
               onCancel={handleModalClose}
               onConfirm={handleTriggerRemoveConfirm}
             >

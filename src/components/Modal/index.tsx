@@ -1,6 +1,6 @@
 import React, { memo, MouseEvent, useCallback, useEffect, useLayoutEffect, useRef } from "react";
-import "./style.css";
 import { getFocusableChildren } from "./utils";
+import "./style.css";
 
 export interface ModalProps {
   onClose: () => void;
